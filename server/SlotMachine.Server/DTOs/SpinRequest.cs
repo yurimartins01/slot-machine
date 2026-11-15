@@ -1,5 +1,3 @@
 ﻿namespace SlotMachine.Server.DTOs;
 
-public class SpinRequest
-{
-}
+public record SpinRequest(decimal BetAmount);

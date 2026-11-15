@@ -1,6 +1,6 @@
 ﻿namespace SlotMachine.Server.Domain;
 
-public class PayTable
+public static class PayTable
 {
     public static decimal CalculatePayout(Symbol[] reels, decimal bet)
     {

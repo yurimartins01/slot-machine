@@ -2,6 +2,9 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
 import type { SpinRequest, SpinResponse } from "../types/slot";
 
+const HUB_URL = import.meta.env.VITE_API_URL || "http://localhost:5035/slothub";
+
+
 export function useSlotSignalR() {
   const [balance, setBalance] = useState<number>(0);
   const [connection, setConnection] = useState<HubConnection | null>(null);
@@ -9,8 +12,10 @@ export function useSlotSignalR() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+
+
     const newConnection = new HubConnectionBuilder()
-      .withUrl("http://localhost:5035/slothub")
+      .withUrl(HUB_URL)
       .withAutomaticReconnect()
       .build();
 

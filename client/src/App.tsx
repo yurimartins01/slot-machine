@@ -14,6 +14,10 @@ export function App() {
   ]);
   const [betAmount, setBetAmount] = useState<number>(10);
   const [lastWin, setLastWin] = useState<number>(0);
+  const [pendingBalance, setPendingBalance] = useState<number | null>(null);
+
+  const currentDisplayBalance = pendingBalance ?? balance;
+
 
   const isAnySpinning = spinningReels.some((spinning) => spinning);
 
@@ -23,11 +27,13 @@ export function App() {
     if (!canSpin) return;
 
     setLastWin(0);
+    setPendingBalance(balance - betAmount);
     setSpinningReels([true, true, true]);
 
     const response = await spin(betAmount);
 
     if (!response) {
+      setPendingBalance(null);
       setSpinningReels([false, false, false]);
       return;
     }
@@ -42,6 +48,7 @@ export function App() {
     setTimeout(() => {
       setSpinningReels([false, false, false]);
       setLastWin(response.payout);
+      setPendingBalance(null);
     }, 1300);
   };
 
@@ -68,7 +75,7 @@ export function App() {
           <div>
             <p className="text-xs uppercase tracking-wider text-slate-400">Saldo Atual</p>
             <p className="text-2xl sm:text-3xl font-bold text-emerald-400">
-              R$ {balance.toFixed(2)}
+              R$ {currentDisplayBalance.toFixed(2)}
             </p>
           </div>
           <div className="text-right">
@@ -126,7 +133,7 @@ export function App() {
             disabled={!canSpin}
             className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-lg tracking-wider uppercase transition-all bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 hover:from-emerald-400 hover:to-green-500 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20"
           >
-            {isAnySpinning && !canSpin ? "Girando..." : balance < betAmount ? "RECARREGUE" : "GIRAR"}
+            {isAnySpinning ? "Girando..." : balance < betAmount ? "RECARREGUE" : "GIRAR"}
 
           </button>
         </div>

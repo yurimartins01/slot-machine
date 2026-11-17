@@ -10,13 +10,14 @@ builder.Services.AddSingleton<IGameEngineService, GameEngineService>();
 
 builder.Services.AddSignalR();
 
+var allowedOrigin = builder.Configuration["AllowedOrigin"] ?? "http://localhost:5173";
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "ClientPolicy",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173");
+            policy.WithOrigins(allowedOrigin);
             policy.AllowAnyHeader();
             policy.AllowAnyMethod();
             policy.AllowCredentials();
